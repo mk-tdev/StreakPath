@@ -5,12 +5,12 @@ import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
 
 // Placeholder Firebase config. 
 const firebaseConfig = {
-  apiKey: "AIzaSyBFxVwUFyWpcuvrPYo1YUSnhAgurNf0WKA",
-  authDomain: "streakpath.firebaseapp.com",
-  projectId: "streakpath",
-  storageBucket: "streakpath.firebasestorage.app",
-  messagingSenderId: "528966605322",
-  appId: "streakpath"
+  apiKey: "api-key",
+  authDomain: "auth-domain",
+  projectId: "project-id",
+  storageBucket: "storage-bucket",
+  messagingSenderId: "messaging-sender-id",
+  appId: "app-id"
 };
 
 const app = initializeApp(firebaseConfig);
