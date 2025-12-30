@@ -172,7 +172,7 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectHabit }) => {
       />
       
       <TouchableOpacity 
-        style={styles.fab}
+        style={[styles.fab, { bottom: Math.max(insets.bottom, 16) + 16 }]}
         onPress={() => setModalVisible(true)}
       >
         <Plus color="white" size={32} />
