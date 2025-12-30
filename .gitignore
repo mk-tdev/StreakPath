@@ -33,6 +33,14 @@ yarn-error.*
 # local env files
 .env*.local
 
+# Firebase config files (sensitive)
+google-services.json
+GoogleService-Info.plist
+
+# Environment variables
+.env
+.env*.local
+
 # typescript
 *.tsbuildinfo
 
@@ -41,3 +49,5 @@ yarn-error.*
 /android
 
 .npm-cache
+
+/submit-assets

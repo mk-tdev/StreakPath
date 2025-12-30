@@ -2,6 +2,7 @@ import React, { useState } from 'react';
 import { View, Text, StyleSheet, Modal, TextInput, TouchableOpacity, ScrollView } from 'react-native';
 import { Theme } from '../theme/Theme';
 import { X, Check, Plus, ChevronDown } from 'lucide-react-native';
+import { useSafeAreaInsets } from 'react-native-safe-area-context';
 
 interface AddHabitModalProps {
   visible: boolean;
@@ -21,6 +22,7 @@ export const AddHabitModal: React.FC<AddHabitModalProps> = ({ visible, onClose, 
   const [isCreatingNewGroup, setIsCreatingNewGroup] = useState(false);
   const [newGroupName, setNewGroupName] = useState('');
   const [showGroupPicker, setShowGroupPicker] = useState(false);
+  const insets = useSafeAreaInsets();
 
   // Combine existing groups with "General" at the start
   const allGroups = ['General', ...existingGroups.filter(g => g !== 'General')];
@@ -166,7 +168,10 @@ export const AddHabitModal: React.FC<AddHabitModalProps> = ({ visible, onClose, 
             </View>
           </ScrollView>
 
-          <TouchableOpacity style={styles.addButton} onPress={handleAdd}>
+          <TouchableOpacity 
+            style={[styles.addButton, { marginBottom: Math.max(insets.bottom, 16) }]} 
+            onPress={handleAdd}
+          >
             <Text style={styles.addButtonText}>Create Habit</Text>
           </TouchableOpacity>
         </View>

@@ -1,4 +1,4 @@
-import React, { useState, useMemo } from 'react';
+import React, { useState, useMemo, useEffect } from 'react';
 import { View, Text, StyleSheet, SectionList, TouchableOpacity, StatusBar, ActivityIndicator, TextInput } from 'react-native';
 import { SafeAreaView } from 'react-native-safe-area-context';
 import { Theme } from '../theme/Theme';
@@ -9,6 +9,7 @@ import { Plus, User, Search, X } from 'lucide-react-native';
 import { useAuth } from '../context/AuthContext';
 import { Habit } from '../utils/types';
 import { useSafeAreaInsets } from 'react-native-safe-area-context';
+import { Analytics } from '../services/analytics';
 
 interface DashboardProps {
   onSelectHabit: (habit: Habit) => void;
@@ -48,6 +49,21 @@ export const Dashboard: React.FC<DashboardProps> = ({ onSelectHabit }) => {
         data: groupedHabits[group],
       }));
   }, [habits, searchQuery]);
+
+  // Track search usage
+  useEffect(() => {
+    if (searchQuery.length > 0) {
+      const timer = setTimeout(() => {
+        Analytics.events.searchUsed(searchQuery.length);
+      }, 1000); // Debounce to avoid excessive events
+      return () => clearTimeout(timer);
+    }
+  }, [searchQuery]);
+
+  // Track screen view on mount
+  useEffect(() => {
+    Analytics.events.screenView('Dashboard');
+  }, []);
 
   const renderHeader = () => (
     <View style={[styles.header, { paddingTop: insets.top }]}>

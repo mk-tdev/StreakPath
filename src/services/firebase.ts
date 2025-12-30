@@ -1,24 +1,22 @@
 import { initializeApp } from 'firebase/app';
-// @ts-ignore
-import { initializeAuth, getReactNativePersistence } from 'firebase/auth';
-import ReactNativeAsyncStorage from '@react-native-async-storage/async-storage';
+import { getAuth } from 'firebase/auth';
 
-// Placeholder Firebase config. 
 const firebaseConfig = {
-  apiKey: "api-key",
-  authDomain: "auth-domain",
-  projectId: "project-id",
-  storageBucket: "storage-bucket",
-  messagingSenderId: "messaging-sender-id",
-  appId: "app-id"
+  apiKey: process.env.EXPO_PUBLIC_FIREBASE_API_KEY,
+  authDomain: process.env.EXPO_PUBLIC_FIREBASE_AUTH_DOMAIN,
+  projectId: process.env.EXPO_PUBLIC_FIREBASE_PROJECT_ID,
+  storageBucket: process.env.EXPO_PUBLIC_FIREBASE_STORAGE_BUCKET,
+  messagingSenderId: process.env.EXPO_PUBLIC_FIREBASE_MESSAGING_SENDER_ID,
+  appId: process.env.EXPO_PUBLIC_FIREBASE_APP_ID
 };
 
 const app = initializeApp(firebaseConfig);
 
-// Persistence fix react native
-const auth = initializeAuth(app, {
-  persistence: getReactNativePersistence(ReactNativeAsyncStorage)
-});
+// Initialize Auth
+const auth = getAuth(app);
+
+// Note: Firebase Analytics is web-only and not compatible with React Native
+// For React Native analytics, use Expo's built-in analytics or a different solution
 
 export { auth };
 export default app;

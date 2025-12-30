@@ -3,6 +3,7 @@ import { Habit } from '../utils/types';
 import { HabitStorage } from '../services/HabitStorage';
 import { GoogleDriveSync } from '../services/GoogleDriveSync';
 import { useAuth } from './AuthContext';
+import { Analytics } from '../services/analytics';
 
 interface HabitContextType {
   habits: Habit[];
@@ -71,6 +72,9 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
     setHabits(updatedHabits);
     await HabitStorage.saveHabits(updatedHabits);
     
+    // Analytics: Track habit creation
+    Analytics.events.habitCreated(group || 'General');
+    
     if (!userState.isGuest && userState.user) {
       await GoogleDriveSync.syncToDrive(updatedHabits);
     }
@@ -103,12 +107,20 @@ export const HabitProvider: React.FC<{ children: React.ReactNode }> = ({ childre
 
     const updatedHabit = { ...habit, completions: newCompletions };
     await updateHabit(updatedHabit);
+    
+    // Analytics: Track habit completion
+    if (nextStatus === 'done') {
+      Analytics.events.habitCompleted(habitId);
+    }
   };
 
   const deleteHabit = async (habitId: string) => {
     const updatedHabits = habits.filter(h => h.id !== habitId);
     setHabits(updatedHabits);
     await HabitStorage.saveHabits(updatedHabits);
+    
+    // Analytics: Track habit deletion
+    Analytics.events.habitDeleted(habitId);
     
     if (!userState.isGuest && userState.user) {
       await GoogleDriveSync.syncToDrive(updatedHabits);

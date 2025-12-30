@@ -3,6 +3,7 @@ import { UserState } from '../utils/types';
 import { auth } from '../services/firebase';
 import { onAuthStateChanged, signInAnonymously, signOut as firebaseSignOut } from 'firebase/auth';
 import AsyncStorage from '@react-native-async-storage/async-storage';
+import { Analytics } from '../services/analytics';
 
 const GUEST_NAME_KEY = '@streakpath_guest_name';
 
@@ -73,6 +74,13 @@ export const AuthProvider: React.FC<{ children: React.ReactNode }> = ({ children
         await setGuestName(name);
       }
       setUserState({ isGuest: true, user: null });
+      
+      // Analytics: Track guest login
+      Analytics.events.loginGuest(!!name);
+      Analytics.setUserProperty('user_type', 'guest');
+      if (name) {
+        Analytics.setUserProperty('has_name', 'true');
+      }
     } catch (error) {
       console.error('Guest login failed', error);
     } finally {
